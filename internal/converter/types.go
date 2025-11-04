@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 	"github.com/valpere/yakateka/internal"
@@ -96,8 +97,8 @@ func (f *Factory) buildPipeline(from, to internal.DocumentFormat) ([]ConversionS
 		internal.FormatHTML, // Good: HTML preserves structure
 	}
 
+	// Try direct 2-step conversion
 	for _, intermediate := range intermediateFormats {
-		// Try 2-step pipeline: from → intermediate → to
 		pipeline, err := f.try2StepPipeline(from, to, intermediate)
 		if err == nil {
 			log.Info().
@@ -110,7 +111,24 @@ func (f *Factory) buildPipeline(from, to internal.DocumentFormat) ([]ConversionS
 		}
 	}
 
-	return nil, fmt.Errorf("no conversion pipeline found for %s → %s (requires LibreOffice or additional converters)", from, to)
+	// Try multi-step conversion (up to 4 steps)
+	pipeline, err := f.tryMultiStepPipeline(from, to, intermediateFormats, 4)
+	if err == nil {
+		// Build via description
+		var via []string
+		for _, step := range pipeline {
+			via = append(via, string(step.ToFormat))
+		}
+		log.Info().
+			Str("from", string(from)).
+			Str("to", string(to)).
+			Str("via", strings.Join(via[:len(via)-1], "→")).
+			Int("steps", len(pipeline)).
+			Msg("Built multi-step conversion pipeline")
+		return pipeline, nil
+	}
+
+	return nil, fmt.Errorf("no conversion pipeline found for %s → %s (requires additional converters)", from, to)
 }
 
 // try2StepPipeline attempts to build a 2-step pipeline via an intermediate format
@@ -133,6 +151,69 @@ func (f *Factory) try2StepPipeline(from, to, intermediate internal.DocumentForma
 	}, nil
 }
 
+// tryMultiStepPipeline attempts to build a multi-step pipeline using BFS
+// maxSteps limits the search depth (e.g., 4 for up to 4-step pipelines)
+func (f *Factory) tryMultiStepPipeline(from, to internal.DocumentFormat, intermediates []internal.DocumentFormat, maxSteps int) ([]ConversionStep, error) {
+	// Use breadth-first search to find shortest path
+	type node struct {
+		format   internal.DocumentFormat
+		path     []ConversionStep
+		distance int
+	}
+
+	queue := []node{{format: from, path: nil, distance: 0}}
+	visited := make(map[internal.DocumentFormat]bool)
+	visited[from] = true
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+
+		// Stop if we've exceeded max steps
+		if current.distance >= maxSteps {
+			continue
+		}
+
+		// Try all possible next formats (intermediates + target)
+		candidates := append([]internal.DocumentFormat{to}, intermediates...)
+		for _, nextFormat := range candidates {
+			// Skip if already visited
+			if visited[nextFormat] {
+				continue
+			}
+
+			// Try to find converter for current → next
+			converter, err := f.GetConverter(current.format, nextFormat)
+			if err != nil {
+				continue // No converter available
+			}
+
+			// Build new path
+			newPath := make([]ConversionStep, len(current.path))
+			copy(newPath, current.path)
+			newPath = append(newPath, ConversionStep{
+				FromFormat: current.format,
+				ToFormat:   nextFormat,
+				Converter:  converter,
+			})
+
+			// Check if we reached the target
+			if nextFormat == to {
+				return newPath, nil
+			}
+
+			// Add to queue for further exploration
+			visited[nextFormat] = true
+			queue = append(queue, node{
+				format:   nextFormat,
+				path:     newPath,
+				distance: current.distance + 1,
+			})
+		}
+	}
+
+	return nil, fmt.Errorf("no multi-step pipeline found")
+}
 
 // executePipeline executes a multi-step conversion pipeline
 func (f *Factory) executePipeline(ctx context.Context, input, output string, opts internal.ConversionOptions, pipeline []ConversionStep) error {

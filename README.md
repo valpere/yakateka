@@ -96,19 +96,32 @@ make install
 **PostScript Converter** (Ghostscript):
 - ✅ **PS → PDF** (conversion using ps2pdf)
 
-**Conversion Pipeline** (NEW!):
-- 🔄 **Automatic multi-step conversion** when no direct converter exists
+**LibreOffice Converter** (✅ **NEW!**):
+- ✅ **PDF/PS/DOC/DOCX/ODT/RTF → HTML** (structure-preserving conversion)
+- ✅ **PDF/PS/DOC/DOCX/ODT/RTF → PDF** (document conversion)
+- ✅ **Enables multi-step pipelines**: DJVU → PS → HTML → MD
+- Supports: DOC, DOCX, ODT, RTF, PDF, PS as input
+- Exports to: PDF, HTML, DOCX, ODT, RTF
+- **Note**: Does NOT export to Markdown directly (uses HTML → MD via Pandoc for structure preservation)
+
+**Conversion Pipeline** (✅ **FULLY IMPLEMENTED!**):
+- 🔄 **Automatic multi-step conversion** using BFS algorithm
+- Finds shortest path between formats (up to 4 steps)
 - Intermediate formats: **PDF → PS → HTML** (in priority order, preserves structure)
 - **TXT is NOT used** as intermediate format (loses document structure)
+- **Example**: DJVU → PS → HTML → MD (3-step pipeline)
 - **Transparent to users**: One command, automatic pipeline execution
 - Temp files automatically cleaned up
-- **Note**: Full pipeline support postponed until LibreOffice implementation (PDF reading)
+
+**Calibre Converter** (✅ **NEW!**):
+- ✅ **MOBI/EPUB/FB2 ↔ MOBI/EPUB/FB2** (ebook format conversions)
+- ✅ **Tested**: EPUB → MOBI (9.5MB in 2.7s), FB2 → EPUB (586KB in 0.6s)
+- Supports input: MOBI, EPUB, FB2, HTML, TXT, PDF, DOCX, ODT, RTF
+- Supports output: MOBI, EPUB, FB2, HTML, TXT, PDF, DOCX, ODT, RTF
+- Includes AZW, AZW3, LIT, PDB and many more ebook formats
+- Quality options: `--quality high` for pretty-print output
 
 **Future Converters**:
-- **Calibre** (`ebook-convert`): MOBI, AZW, AZW3, and other ebook formats (ready to implement)
-  - Tool available: `/usr/bin/ebook-convert` (version 7.6.0)
-  - Supports: MOBI, AZW, AZW3, LIT, PDB, and many more
-- **LibreOffice**: PDF, DOC → TXT/DOCX (coming soon)
 - **OCR + AI Pipeline** (Phase 3):
   - For scanned PDFs, DJVUs without text layer
   - **Page-by-page processing**:
