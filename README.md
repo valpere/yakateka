@@ -121,6 +121,13 @@ make install
 - Includes AZW, AZW3, LIT, PDB and many more ebook formats
 - Quality options: `--quality high` for pretty-print output
 
+**Declarative Converter Configuration** (✅ **NEW!**):
+- 🎯 **Add converters without code changes** - Edit `config/converters.yaml`
+- 📋 **Profiles**: Reusable command templates (`simple_io`, `pandoc_style`, `libreoffice_style`)
+- 🔧 **Format mapping**: Map internal names to tool-specific names
+- ⚙️  **Conversion overrides**: Per-format customization with wildcards
+- 📚 **See**: `docs/CONVERTER_CONFIGURATION.md` for complete guide
+
 **Future Converters**:
 - **OCR + AI Pipeline** (Phase 3):
   - For scanned PDFs, DJVUs without text layer

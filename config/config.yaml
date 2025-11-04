@@ -62,3 +62,13 @@ output:
 logging:
   level: info                 # Log level (debug, info, warn, error)
   format: json                # Log format (json, text)
+
+# Helper Configuration (NEW!)
+helpers:
+  cache_file: helpers.yaml    # Generated cache file
+  weights:
+    # Add your helper scripts here with weights (0.0 to 1.0)
+    # Higher weight = higher priority
+    # Example:
+    # /usr/local/bin/pandoc-helper.sh: 0.9
+    # /usr/local/bin/calibre-helper.sh: 0.8

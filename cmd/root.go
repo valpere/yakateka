@@ -89,6 +89,17 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		log.Debug().Str("config", viper.ConfigFileUsed()).Msg("Using config file")
 	}
+
+	// Also try to load converters.yaml from the same directory
+	convertersFile := filepath.Join(filepath.Dir(viper.ConfigFileUsed()), "converters.yaml")
+	if _, err := os.Stat(convertersFile); err == nil {
+		viper.SetConfigFile(convertersFile)
+		if err := viper.MergeInConfig(); err != nil {
+			log.Warn().Err(err).Str("file", convertersFile).Msg("Failed to merge converters config")
+		} else {
+			log.Debug().Str("config", convertersFile).Msg("Merged converters config")
+		}
+	}
 }
 
 // setDefaults sets default configuration values

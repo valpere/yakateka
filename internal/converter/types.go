@@ -9,6 +9,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/valpere/yakateka/internal"
+	"github.com/valpere/yakateka/internal/converter/config"
+	"github.com/valpere/yakateka/internal/converter/generic"
 )
 
 // Factory creates converters based on input/output formats
@@ -33,6 +35,26 @@ func NewFactory() *Factory {
 // Register registers a converter for specific formats
 func (f *Factory) Register(name string, converter internal.Converter) {
 	f.converters[name] = converter
+}
+
+// LoadFromConfig loads converters from configuration
+func (f *Factory) LoadFromConfig(cfg *config.ConverterConfig) error {
+	for name, tool := range cfg.Converters {
+		// Skip plaintext - it's handled specially
+		if name == "plaintext" {
+			continue
+		}
+
+		converter := generic.NewConverter(name, tool, cfg.Profiles)
+		f.Register(name, converter)
+
+		log.Debug().
+			Str("converter", name).
+			Strs("input", tool.Formats.Input).
+			Strs("output", tool.Formats.Output).
+			Msg("Registered converter from config")
+	}
+	return nil
 }
 
 // GetConverter returns a converter that supports the given formats

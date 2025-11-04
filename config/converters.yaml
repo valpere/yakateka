@@ -1,0 +1,149 @@
+# Converter Profiles
+# Reusable command patterns for common converter types
+converter_profiles:
+  simple_io:
+    # Input → Output style (e.g., ps2pdf input.ps output.pdf)
+    command_template: "{binary} {input} {output} {extra_args}"
+
+  pandoc_style:
+    # Pandoc-style: -f format -t format
+    command_template: "{binary} -f {input_format} -t {output_format} {input} -o {output} {extra_args}"
+
+  libreoffice_style:
+    # LibreOffice --convert-to style
+    command_template: "{binary} --headless --convert-to {format} --outdir {outdir} {input}"
+    post_process: rename_from_basename
+
+# Converter Tools
+# Each tool defines supported formats and conversion commands
+converters:
+  # Pandoc - Universal markup converter
+  pandoc:
+    binary: /usr/bin/pandoc
+    profile: pandoc_style
+    timeout: 300
+
+    formats:
+      input: [md, html, epub, docx, odt, rtf, rst, latex, fb2, csv]
+      output: [md, html, epub, docx, odt, pdf, txt, rtf, rst, latex, fb2, csv]
+
+    # Pandoc uses different format names
+    format_mapping:
+      md: markdown
+      txt: plain
+      csv: csv
+      latex: latex
+      rst: rst
+
+    conversion_overrides:
+      "md->pdf":
+        extra_args: "--pdf-engine=xelatex"
+        quality:
+          high: "--toc --number-sections"
+      "*->pdf":
+        extra_args: "--pdf-engine=xelatex"
+
+  # LibreOffice - Office document converter
+  libreoffice:
+    binary: /usr/bin/soffice
+    profile: libreoffice_style
+    timeout: 600
+
+    formats:
+      input: [pdf, doc, docx, odt, rtf, ps]
+      output: [pdf, html, docx, odt, rtf, txt]
+
+    conversion_overrides:
+      "docx->pdf":
+        output_format: "pdf:writer_pdf_Export"
+      "doc->pdf":
+        output_format: "pdf:writer_pdf_Export"
+      "odt->pdf":
+        output_format: "pdf:writer_pdf_Export"
+      "rtf->pdf":
+        output_format: "pdf:writer_pdf_Export"
+      "*->html":
+        output_format: "html"
+      "*->txt":
+        output_format: "txt:Text (encoded):UTF8"
+
+  # Calibre - Ebook converter
+  calibre:
+    binary: /usr/bin/ebook-convert
+    profile: simple_io
+    timeout: 300
+
+    formats:
+      input: [mobi, epub, fb2, html, txt, pdf, docx, odt, rtf]
+      output: [mobi, epub, fb2, html, txt, pdf, docx, odt, rtf]
+
+    conversion_overrides:
+      "*->*":
+        quality:
+          high: "--pretty-print"
+
+  # DjVu text extraction
+  djvutxt:
+    binary: /usr/bin/djvutxt
+    profile: simple_io
+    timeout: 300
+
+    formats:
+      input: [djvu]
+      output: [txt]
+
+  # DjVu to PostScript
+  djvups:
+    binary: /usr/bin/djvups
+    command_template: "{binary} -o {output} {input}"
+    timeout: 600
+
+    formats:
+      input: [djvu]
+      output: [ps]
+
+  # PostScript to PDF
+  ps2pdf:
+    binary: /usr/bin/ps2pdf
+    profile: simple_io
+    timeout: 300
+
+    formats:
+      input: [ps]
+      output: [pdf]
+
+  # Plain text converter is registered separately in code (not via config)
+
+# Example: Additional tools that can be easily added
+#
+#  pdftotext:
+#    binary: /usr/bin/pdftotext
+#    command_template: "{binary} -layout {input} {output}"
+#    timeout: 300
+#    formats:
+#      input: [pdf]
+#      output: [txt]
+#
+#  antiword:
+#    binary: /usr/bin/antiword
+#    command_template: "{binary} {input} > {output}"
+#    timeout: 60
+#    formats:
+#      input: [doc]
+#      output: [txt]
+#
+#  catdoc:
+#    binary: /usr/bin/catdoc
+#    command_template: "{binary} {input} > {output}"
+#    timeout: 60
+#    formats:
+#      input: [doc]
+#      output: [txt]
+#
+#  wvText:
+#    binary: /usr/bin/wvText
+#    command_template: "{binary} {input} {output}"
+#    timeout: 60
+#    formats:
+#      input: [doc]
+#      output: [txt]
