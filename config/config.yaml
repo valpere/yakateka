@@ -36,6 +36,12 @@ converter:
   postscript:
     ps2pdf_path: /usr/bin/ps2pdf    # Path to ps2pdf binary (Ghostscript)
 
+  libreoffice:
+    soffice_path: /usr/bin/soffice  # Path to soffice binary (LibreOffice)
+
+  calibre:
+    ebook_convert_path: /usr/bin/ebook-convert  # Path to ebook-convert binary (Calibre)
+
   image:
     library: bimg             # Image library (bimg, imagick)
     format: png               # Default output format

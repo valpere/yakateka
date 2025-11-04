@@ -13,7 +13,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/valpere/yakateka/internal"
 	"github.com/valpere/yakateka/internal/converter"
+	"github.com/valpere/yakateka/internal/converter/calibre"
 	"github.com/valpere/yakateka/internal/converter/djvu"
+	"github.com/valpere/yakateka/internal/converter/libreoffice"
 	"github.com/valpere/yakateka/internal/converter/pandoc"
 	"github.com/valpere/yakateka/internal/converter/plaintext"
 	"github.com/valpere/yakateka/internal/converter/postscript"
@@ -156,9 +158,17 @@ func runConvert(cmd *cobra.Command, args []string) error {
 	psConverter := postscript.NewConverter(ps2pdfPath)
 	factory.Register("postscript", psConverter)
 
+	// Register LibreOffice converter (for PDF/DOC → HTML/TXT conversion)
+	sofficePath := viper.GetString("converter.libreoffice.soffice_path")
+	libreofficeConverter := libreoffice.NewConverter(sofficePath)
+	factory.Register("libreoffice", libreofficeConverter)
+
+	// Register Calibre converter (for ebook formats: MOBI, EPUB, FB2, etc.)
+	ebookConvertPath := viper.GetString("converter.calibre.ebook_convert_path")
+	calibreConverter := calibre.NewConverter(ebookConvertPath)
+	factory.Register("calibre", calibreConverter)
+
 	// TODO: Register additional converters:
-	// - LibreOffice converter
-	// - Calibre converter (MOBI, AZW)
 	// - OCR + Ollama converter
 
 	// Perform conversion with timeout
