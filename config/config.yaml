@@ -1,0 +1,49 @@
+# YakaTeka Configuration File
+# This file can be placed at:
+#   - $HOME/.yakateka/config.yaml
+#   - ./config/config.yaml
+#   - Any path specified with --config flag
+
+# OCR Configuration
+ocr:
+  engine: tesseract           # OCR engine (tesseract, paddleocr)
+  languages:                  # Languages to use for OCR
+    - uk                      # Ukrainian
+    - ru                      # Russian
+    - en                      # English
+  dpi: 300                    # DPI for image scanning
+  preprocess:
+    denoise: true             # Apply noise reduction
+    deskew: true              # Correct image skew
+    threshold: auto           # Thresholding method (auto, manual)
+
+# Document Converter Configuration
+converter:
+  pdf:
+    engine: pdfcpu            # PDF engine (pdfcpu, unipdf)
+    quality: high             # Conversion quality (low, medium, high)
+
+  pandoc:
+    path: /usr/bin/pandoc     # Path to pandoc binary
+    extra_args: []            # Additional pandoc arguments
+
+  image:
+    library: bimg             # Image library (bimg, imagick)
+    format: png               # Default output format
+    dpi: 300                  # DPI for conversions
+
+# Metadata Configuration
+metadata:
+  checksum: sha256            # Checksum algorithm (sha256, md5)
+  sidecar: true               # Create .json metadata sidecar files
+  embed: true                 # Embed metadata in documents when possible
+
+# Output Configuration
+output:
+  format: json                # Output format (json, yaml, text)
+  pretty: true                # Pretty-print output
+
+# Logging Configuration
+logging:
+  level: info                 # Log level (debug, info, warn, error)
+  format: json                # Log format (json, text)

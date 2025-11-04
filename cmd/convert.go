@@ -1,0 +1,163 @@
+package cmd
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/valpere/yakateka/internal"
+	"github.com/valpere/yakateka/internal/converter"
+	"github.com/valpere/yakateka/internal/converter/pdf"
+)
+
+var (
+	inputFormat  string
+	outputFormat string
+	quality      string
+	dpi          int
+	via          string
+)
+
+// convertCmd represents the convert command
+var convertCmd = &cobra.Command{
+	Use:   "convert <input> <output>",
+	Short: "Convert document between formats",
+	Long: `Convert documents between different formats.
+
+Supported conversions:
+  - PDF → TXT (text extraction)
+  - PDF → PNG/JPG (coming soon)
+  - More formats coming in future phases
+
+Examples:
+  # Convert PDF to text (auto-detect formats from extensions)
+  yakateka convert document.pdf document.txt
+
+  # Explicitly specify formats
+  yakateka convert document.pdf output.txt --from pdf --to txt
+
+  # Use specific converter
+  yakateka convert notes.md document.pdf --via pandoc`,
+	Args: cobra.ExactArgs(2),
+	RunE: runConvert,
+}
+
+func init() {
+	rootCmd.AddCommand(convertCmd)
+
+	// Flags
+	convertCmd.Flags().StringVarP(&inputFormat, "from", "f", "",
+		"input format (auto-detected from extension if not specified)")
+	convertCmd.Flags().StringVarP(&outputFormat, "to", "t", "",
+		"output format (auto-detected from extension if not specified)")
+	convertCmd.Flags().StringVar(&quality, "quality", "",
+		"conversion quality (low, medium, high)")
+	convertCmd.Flags().IntVar(&dpi, "dpi", 0,
+		"DPI for image conversions (default from config)")
+	convertCmd.Flags().StringVar(&via, "via", "",
+		"specific converter to use (pandoc, libreoffice, etc.)")
+}
+
+func runConvert(cmd *cobra.Command, args []string) error {
+	input := args[0]
+	output := args[1]
+
+	// Validate input file exists
+	if _, err := os.Stat(input); os.IsNotExist(err) {
+		return fmt.Errorf("input file does not exist: %s", input)
+	}
+
+	// Auto-detect formats from extensions if not specified
+	if inputFormat == "" {
+		inputFormat = strings.TrimPrefix(filepath.Ext(input), ".")
+		if inputFormat == "" {
+			return fmt.Errorf("cannot detect input format, please specify with --from")
+		}
+	}
+
+	if outputFormat == "" {
+		outputFormat = strings.TrimPrefix(filepath.Ext(output), ".")
+		if outputFormat == "" {
+			return fmt.Errorf("cannot detect output format, please specify with --to")
+		}
+	}
+
+	// Normalize formats to lowercase
+	inputFormat = strings.ToLower(inputFormat)
+	outputFormat = strings.ToLower(outputFormat)
+
+	log.Info().
+		Str("input", input).
+		Str("output", output).
+		Str("from", inputFormat).
+		Str("to", outputFormat).
+		Msg("Starting conversion")
+
+	// Build conversion options
+	opts := internal.ConversionOptions{
+		InputFormat:  internal.DocumentFormat(inputFormat),
+		OutputFormat: internal.DocumentFormat(outputFormat),
+		Quality:      quality,
+		DPI:          dpi,
+		Via:          via,
+	}
+
+	// Use quality from config if not specified
+	if opts.Quality == "" {
+		opts.Quality = viper.GetString("converter.pdf.quality")
+	}
+
+	// Use DPI from config if not specified
+	if opts.DPI == 0 {
+		opts.DPI = viper.GetInt("converter.pdf.dpi")
+	}
+
+	// Create converter factory
+	factory := converter.NewFactory()
+
+	// Register PDF converter
+	pdfEngine := viper.GetString("converter.pdf.engine")
+	factory.Register("pdf", pdf.NewConverter(pdfEngine))
+
+	// Perform conversion with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+	defer cancel()
+
+	startTime := time.Now()
+	err := factory.Convert(ctx, input, output, opts)
+	duration := time.Since(startTime)
+
+	if err != nil {
+		log.Error().
+			Err(err).
+			Str("input", input).
+			Str("output", output).
+			Dur("duration", duration).
+			Msg("Conversion failed")
+		return fmt.Errorf("conversion failed: %w", err)
+	}
+
+	// Get output file size
+	stat, _ := os.Stat(output)
+	var fileSize int64
+	if stat != nil {
+		fileSize = stat.Size()
+	}
+
+	log.Info().
+		Str("output", output).
+		Int64("size", fileSize).
+		Dur("duration", duration).
+		Msg("Conversion completed successfully")
+
+	fmt.Printf("✓ Converted %s → %s (%d bytes) in %v\n",
+		input, output, fileSize, duration.Round(time.Millisecond))
+
+	return nil
+}

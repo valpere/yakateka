@@ -298,16 +298,19 @@ yakateka preprocess <image> <output> [--denoise] [--deskew] [--threshold]
 
 ## Development Roadmap
 
-### Phase 1: Foundation ← **CURRENT PRIORITY**
-- [ ] Initialize project structure
-- [ ] Setup Cobra CLI framework
-- [ ] Setup Viper configuration
-- [ ] Basic logging (structured, using zerolog)
-- [ ] Makefile for build automation
-- [ ] Basic tests and CI setup
+### Phase 1: Foundation ✅ **COMPLETED**
+- [x] Initialize project structure
+- [x] Setup Cobra CLI framework
+- [x] Setup Viper configuration
+- [x] Basic logging (structured, using zerolog)
+- [x] Makefile for build automation
+- [x] Basic tests and CI setup
+- [x] Version flag support
 
-### Phase 2: Core Conversion
-- [ ] PDF → Text (pdfcpu)
+### Phase 2: Core Conversion ← **CURRENT PRIORITY**
+- [x] PDF → Text (pdfcpu)
+- [x] Converter factory pattern
+- [x] Convert command with auto-format detection
 - [ ] DOCX → Text (gooxml)
 - [ ] Text → PDF (via pandoc)
 - [ ] Pandoc wrapper (Markdown/HTML conversion)
