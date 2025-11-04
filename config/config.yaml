@@ -9,8 +9,8 @@ ocr:
   engine: tesseract           # OCR engine (tesseract, paddleocr)
   languages:                  # Languages to use for OCR
     - uk                      # Ukrainian
-    - ru                      # Russian
     - en                      # English
+    - ru                      # Russian
   dpi: 300                    # DPI for image scanning
   preprocess:
     denoise: true             # Apply noise reduction
@@ -19,6 +19,8 @@ ocr:
 
 # Document Converter Configuration
 converter:
+  timeout: 300                # Conversion timeout in seconds (default 300 = 5 minutes)
+
   pdf:
     engine: pdfcpu            # PDF engine (pdfcpu, unipdf)
     quality: high             # Conversion quality (low, medium, high)
@@ -26,6 +28,13 @@ converter:
   pandoc:
     path: /usr/bin/pandoc     # Path to pandoc binary
     extra_args: []            # Additional pandoc arguments
+
+  djvu:
+    djvutxt_path: /usr/bin/djvutxt  # Path to djvutxt binary (text extraction)
+    djvups_path: /usr/bin/djvups    # Path to djvups binary (PostScript conversion)
+
+  postscript:
+    ps2pdf_path: /usr/bin/ps2pdf    # Path to ps2pdf binary (Ghostscript)
 
   image:
     library: bimg             # Image library (bimg, imagick)

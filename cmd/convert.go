@@ -13,7 +13,10 @@ import (
 	"github.com/spf13/viper"
 	"github.com/valpere/yakateka/internal"
 	"github.com/valpere/yakateka/internal/converter"
-	"github.com/valpere/yakateka/internal/converter/pdf"
+	"github.com/valpere/yakateka/internal/converter/djvu"
+	"github.com/valpere/yakateka/internal/converter/pandoc"
+	"github.com/valpere/yakateka/internal/converter/plaintext"
+	"github.com/valpere/yakateka/internal/converter/postscript"
 )
 
 var (
@@ -22,6 +25,7 @@ var (
 	quality      string
 	dpi          int
 	via          string
+	timeout      int
 )
 
 // convertCmd represents the convert command
@@ -62,6 +66,8 @@ func init() {
 		"DPI for image conversions (default from config)")
 	convertCmd.Flags().StringVar(&via, "via", "",
 		"specific converter to use (pandoc, libreoffice, etc.)")
+	convertCmd.Flags().IntVar(&timeout, "timeout", 300,
+		"conversion timeout in seconds (default 300 = 5 minutes)")
 }
 
 func runConvert(cmd *cobra.Command, args []string) error {
@@ -118,15 +124,46 @@ func runConvert(cmd *cobra.Command, args []string) error {
 		opts.DPI = viper.GetInt("converter.pdf.dpi")
 	}
 
+	// Use timeout from config if not specified (default flag value is 300)
+	if cmd.Flags().Changed("timeout") {
+		// User explicitly set timeout via flag, use it
+	} else {
+		// Use timeout from config
+		timeout = viper.GetInt("converter.timeout")
+	}
+
 	// Create converter factory
 	factory := converter.NewFactory()
 
-	// Register PDF converter
-	pdfEngine := viper.GetString("converter.pdf.engine")
-	factory.Register("pdf", pdf.NewConverter(pdfEngine))
+	// Register Pandoc converter
+	pandocPath := viper.GetString("converter.pandoc.path")
+	pandocExtraArgs := viper.GetStringSlice("converter.pandoc.extra_args")
+	pandocConverter := pandoc.NewConverter(pandocPath, pandocExtraArgs)
+	factory.Register("pandoc", pandocConverter)
+
+	// Register DjVu converter
+	djvutxtPath := viper.GetString("converter.djvu.djvutxt_path")
+	djvupsPath := viper.GetString("converter.djvu.djvups_path")
+	djvuConverter := djvu.NewConverter(djvutxtPath, djvupsPath)
+	factory.Register("djvu", djvuConverter)
+
+	// Register PlainText converter (for TXT → HTML/MD pipeline support)
+	plaintextConverter := plaintext.NewConverter()
+	factory.Register("plaintext", plaintextConverter)
+
+	// Register PostScript converter (for PS → PDF pipeline support)
+	ps2pdfPath := viper.GetString("converter.postscript.ps2pdf_path")
+	psConverter := postscript.NewConverter(ps2pdfPath)
+	factory.Register("postscript", psConverter)
+
+	// TODO: Register additional converters:
+	// - LibreOffice converter
+	// - Calibre converter (MOBI, AZW)
+	// - OCR + Ollama converter
 
 	// Perform conversion with timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+	timeoutDuration := time.Duration(timeout) * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeoutDuration)
 	defer cancel()
 
 	startTime := time.Now()

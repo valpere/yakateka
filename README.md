@@ -40,12 +40,82 @@ make install
 **Current Phase**: Phase 2 - Core Conversion 🚧
 
 - [x] Phase 1: Foundation complete
-- [x] PDF → Text conversion (pdfcpu)
-- [ ] DOCX → Text conversion (gooxml)
-- [ ] Pandoc wrapper for universal conversion
+- [x] Converter factory pattern
+- [x] Configurable conversion timeout
+- [x] **Pandoc wrapper** (universal converter)
+  - ✅ FB2, EPUB, MD, HTML, DOCX, ODT, RTF (bidirectional)
+  - ✅ All formats → PDF, JSON, CSV, LaTeX, RST
+  - ⚠️  **Cannot read PDF** (Pandoc limitation - can only write PDF)
+- [x] **DjVu converter** (DjVuLibre)
+  - ✅ DJVU → TXT (3.7MB in 487ms)
+  - ⚠️  Requires text layer (OCR-processed DJVUs only)
+- [ ] **PDF → Text** (Requires alternative approaches):
+  - [ ] LibreOffice CLI wrapper
+  - [ ] OCR + Ollama (AI-powered for scanned docs)
+- [ ] DOCX → Text conversion (gooxml - native Go alternative)
 
 **Completed Phases**:
 - ✅ Phase 1: Foundation (project structure, CLI, config, logging)
+- ✅ Phase 2: Pandoc converter (EPUB, MD, DOCX, HTML)
+
+**Important Notes**:
+- **Native Go PDF libraries** (pdfcpu, unipdf) extract PDF rendering instructions rather than text - not suitable for text extraction
+- **Pandoc limitation**: Can convert TO PDF but not FROM PDF - need LibreOffice or OCR for PDF → Text
+- **Current capability**: FB2 ↔ EPUB ↔ MD ↔ HTML ↔ DOCX ↔ ODT ↔ RTF ↔ PDF (one-way to PDF)
+
+### Format Support Matrix
+
+**Pandoc Converter** (implemented):
+
+| From ⬇️ / To ➡️ | TXT | MD | HTML | DOCX | ODT | RTF | PDF | EPUB | FB2 | JSON | CSV | LaTeX | RST |
+|----------------|-----|-------|------|------|-----|-----|-----|------|-----|------|-----|-------|-----|
+| **FB2**        | ✅  | ✅    | ✅   | ✅   | ✅  | ✅  | ✅  | ✅   | -   | ✅   | ✅  | ✅    | ✅  |
+| **EPUB**       | ✅  | ✅    | ✅   | ✅   | ✅  | ✅  | ✅  | -    | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **Markdown**   | ✅  | -     | ✅   | ✅   | ✅  | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **HTML**       | ✅  | ✅    | -    | ✅   | ✅  | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **DOCX**       | ✅  | ✅    | ✅   | -    | ✅  | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **ODT**        | ✅  | ✅    | ✅   | ✅   | -   | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **RTF**        | ✅  | ✅    | ✅   | ✅   | ✅  | -   | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
+| **PDF**        | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | -   | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
+| **DOC**        | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | ❌  | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
+| **DJVU**       | ✅  | ⚠️    | ⚠️   | ⚠️   | ⚠️  | ⚠️  | ⚠️  | ⚠️   | ⚠️  | ⚠️   | ⚠️  | ⚠️    | ⚠️  |
+| **MOBI**       | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | ❌  | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
+
+**Legend**:
+- ✅ Supported and tested
+- ⚠️  Supported for DJVU with text layer (scanned PDFs without OCR will be empty)
+- ❌ Not supported (requires LibreOffice or other converter)
+- `-` Same format (no conversion needed)
+
+**DjVu Converter** (DjVuLibre):
+- ✅ **DJVU → TXT** (tested with 3.7MB extraction in 487ms)
+- ✅ **DJVU → PS** (PostScript conversion using djvups, ~10.5s for 633MB output)
+- ⚠️  Only works with DJVU files that have an embedded text layer
+- 🔄 **Scanned DJVUs without text layer** → Will use OCR/AI pipeline (Phase 3)
+
+**PostScript Converter** (Ghostscript):
+- ✅ **PS → PDF** (conversion using ps2pdf)
+
+**Conversion Pipeline** (NEW!):
+- 🔄 **Automatic multi-step conversion** when no direct converter exists
+- Intermediate formats: **PDF → PS → HTML** (in priority order, preserves structure)
+- **TXT is NOT used** as intermediate format (loses document structure)
+- **Transparent to users**: One command, automatic pipeline execution
+- Temp files automatically cleaned up
+- **Note**: Full pipeline support postponed until LibreOffice implementation (PDF reading)
+
+**Future Converters**:
+- **Calibre** (`ebook-convert`): MOBI, AZW, AZW3, and other ebook formats (ready to implement)
+  - Tool available: `/usr/bin/ebook-convert` (version 7.6.0)
+  - Supports: MOBI, AZW, AZW3, LIT, PDB, and many more
+- **LibreOffice**: PDF, DOC → TXT/DOCX (coming soon)
+- **OCR + AI Pipeline** (Phase 3):
+  - For scanned PDFs, DJVUs without text layer
+  - **Page-by-page processing**:
+    1. Extract images from DJVU/PDF pages
+    2. OCR with Tesseract (multi-language: uk, ru, en)
+    3. AI enhancement with Ollama (for complex layouts, tables, formulas)
+  - Fallback chain: djvutxt → Tesseract OCR → Ollama vision models
 
 ## Usage
 
@@ -58,9 +128,21 @@ yakateka --help
 # Show version
 yakateka --version
 
-# Document conversion
-yakateka convert document.pdf document.txt
-yakateka convert document.pdf output.txt --from pdf --to txt
+# Document conversion (direct conversion)
+yakateka convert document.epub document.txt  # EPUB to text
+yakateka convert notes.md document.pdf       # Markdown to PDF
+yakateka convert document.docx output.txt    # DOCX to text
+yakateka convert page.html page.md           # HTML to Markdown
+
+# Pipeline conversion (automatic multi-step) - requires LibreOffice for structure-preserving paths
+# yakateka convert document.djvu output.md    # DJVU → PS → PDF → MD (postponed)
+# yakateka convert document.djvu output.html  # DJVU → PS → PDF → HTML (postponed)
+
+# With custom timeout (default 300 seconds = 5 minutes)
+yakateka convert large-document.epub output.txt --timeout 600
+
+# Note: PDF to text requires LibreOffice (coming soon)
+# yakateka convert document.pdf output.txt --via libreoffice
 
 # Configure logging
 yakateka --log-level debug --log-format text convert input.pdf output.txt

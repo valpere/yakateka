@@ -46,14 +46,10 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// Global flags
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
-		"config file (default is $HOME/.yakateka/config.yaml)")
-	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info",
-		"log level (debug, info, warn, error)")
-	rootCmd.PersistentFlags().StringVar(&logFormat, "log-format", "json",
-		"log format (json, text)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false,
-		"verbose output (same as --log-level=debug)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.yakateka/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info", "log level (debug, info, warn, error)")
+	rootCmd.PersistentFlags().StringVar(&logFormat, "log-format", "json", "log format (json, text)")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output (same as --log-level=debug)")
 
 	// Bind flags to viper
 	viper.BindPFlag("log.level", rootCmd.PersistentFlags().Lookup("log-level"))
@@ -99,13 +95,14 @@ func initConfig() {
 func setDefaults() {
 	// OCR defaults
 	viper.SetDefault("ocr.engine", "tesseract")
-	viper.SetDefault("ocr.languages", []string{"uk", "ru", "en"})
+	viper.SetDefault("ocr.languages", []string{"uk", "en", "ru"})
 	viper.SetDefault("ocr.dpi", 300)
 	viper.SetDefault("ocr.preprocess.denoise", true)
 	viper.SetDefault("ocr.preprocess.deskew", true)
 	viper.SetDefault("ocr.preprocess.threshold", "auto")
 
 	// Converter defaults
+	viper.SetDefault("converter.timeout", 300)
 	viper.SetDefault("converter.pdf.engine", "pdfcpu")
 	viper.SetDefault("converter.pdf.quality", "high")
 	viper.SetDefault("converter.pandoc.path", "/usr/bin/pandoc")

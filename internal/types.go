@@ -33,6 +33,10 @@ const (
 	FormatMD   DocumentFormat = "md"
 	FormatJSON DocumentFormat = "json"
 	FormatYAML DocumentFormat = "yaml"
+	FormatCSV  DocumentFormat = "csv"
+	FormatLaTeX DocumentFormat = "latex"
+	FormatRST  DocumentFormat = "rst"
+	FormatPS   DocumentFormat = "ps" // PostScript
 
 	// Image formats
 	FormatPNG  DocumentFormat = "png"
