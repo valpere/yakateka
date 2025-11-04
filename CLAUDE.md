@@ -78,13 +78,24 @@ Based on context research (`context-common/13-golang_all_integration-06.md`):
 **Alternative**: PaddleOCR via REST API (if higher accuracy needed for Asian languages)
 
 #### PDF Processing
-**Primary**: **pdfcpu** - `github.com/pdfcpu/pdfcpu`
-- Pure Go, no external dependencies
-- PDF manipulation, extraction, conversion
+**Note**: Native Go PDF text extraction libraries (pdfcpu, unipdf) extract PDF content streams (rendering instructions) rather than actual text, making them unsuitable for text extraction.
 
-**Commercial (optional)**: **UniPDF** - `github.com/unidoc/unipdf`
-- More features, AGPL license
-- Powerful PDF toolkit for advanced operations
+**Adopted Approach** - Three-tier strategy:
+1. **Pandoc** - via `os/exec` CLI wrapper
+   - Universal document converter
+   - PDF → Text, Markdown, HTML
+   - External dependency but very reliable
+
+2. **LibreOffice** - via `os/exec` CLI wrapper
+   - Office formats ↔ PDF
+   - High compatibility
+   - External dependency
+
+3. **OCR + LLM** - Local AI-powered conversion
+   - Inspired by [pdf2md_ollama](https://github.com/gwangjinkim/pdf2md_ollama)
+   - PDF → Images → Ollama (LLM) → Markdown/Text
+   - Best for complex layouts, tables, formulas
+   - Privacy-first (local processing)
 
 #### Office Documents
 **DOCX/XLSX/PPTX**: **gooxml** - `github.com/baliance/gooxml`
@@ -108,6 +119,12 @@ Based on context research (`context-common/13-golang_all_integration-06.md`):
 **Gotenberg** - `https://gotenberg.dev/`
 - Go-based API for HTML/Office → PDF
 - Runs as local service (Docker)
+
+**Calibre** - via `os/exec` CLI wrapper (`ebook-convert`)
+- E-book format conversion
+- MOBI, AZW, AZW3, LIT, PDB → TXT/EPUB/PDF
+- Installed: `/usr/bin/ebook-convert` (version 7.6.0)
+- Excellent for Kindle and proprietary ebook formats
 
 #### Image Processing
 **Primary**: **bimg/libvips** - `github.com/h2non/bimg`
@@ -298,27 +315,61 @@ yakateka preprocess <image> <output> [--denoise] [--deskew] [--threshold]
 
 ## Development Roadmap
 
-### Phase 1: Foundation ← **CURRENT PRIORITY**
-- [ ] Initialize project structure
-- [ ] Setup Cobra CLI framework
-- [ ] Setup Viper configuration
-- [ ] Basic logging (structured, using zerolog)
-- [ ] Makefile for build automation
-- [ ] Basic tests and CI setup
+### Phase 1: Foundation ✅ **COMPLETED**
+- [x] Initialize project structure
+- [x] Setup Cobra CLI framework
+- [x] Setup Viper configuration
+- [x] Basic logging (structured, using zerolog)
+- [x] Makefile for build automation
+- [x] Basic tests and CI setup
+- [x] Version flag support
 
-### Phase 2: Core Conversion
-- [ ] PDF → Text (pdfcpu)
-- [ ] DOCX → Text (gooxml)
-- [ ] Text → PDF (via pandoc)
-- [ ] Pandoc wrapper (Markdown/HTML conversion)
+### Phase 2: Core Conversion ← **CURRENT PRIORITY**
+- [x] Converter factory pattern
+- [x] Convert command with auto-format detection
+- [x] Configurable timeout for conversions
+- [x] **Pandoc wrapper** (universal converter via os/exec)
+  - ✅ EPUB → TXT/MD/HTML (tested with real files)
+  - ✅ MD → PDF/HTML/DOCX/EPUB (tested)
+  - ✅ DOCX → TXT/MD/HTML (tested)
+  - ✅ HTML → MD/TXT/DOCX (tested)
+  - ⚠️ **Cannot read PDF** (Pandoc limitation - can only write PDF)
+  - ✅ Format mapping (internal formats → Pandoc formats)
+  - ✅ Unit tests (85.2% coverage)
+  - ✅ Integration tests with real documents
+  - ✅ Example scripts
+- [ ] **PDF → Text** (Requires alternative to Pandoc):
+  - [ ] LibreOffice wrapper (CLI via os/exec)
+  - [ ] OCR + Ollama (AI-powered, for scanned/complex documents)
+- [ ] DOCX → Text (gooxml - native Go alternative to Pandoc)
 - [ ] Image format conversion (bimg)
 
-### Phase 3: OCR Integration
+### Phase 3: OCR Integration ← **NEXT PRIORITY**
+**Goal**: Handle scanned documents (PDFs, DJVUs without text layer)
+
+**DJVU Processing Strategy**:
+- ✅ Step 1: Try djvutxt (fast text extraction if text layer exists)
+- 🔄 Step 2: If empty → Extract page images + OCR + AI enhancement
+
+**Implementation Plan**:
+- [ ] DjVu page image extraction (ddjvu tool from DjVuLibre)
+  - Tool available: `/usr/bin/ddjvu`
+  - Formats: PNG, TIFF, PPM, PBM, PGM
+  - Example: `ddjvu -format=tiff -page=1-10 input.djvu output_%03d.tiff`
+- [ ] PDF page image extraction (pdfimages or pdfcpu)
 - [ ] Tesseract integration (gosseract)
-- [ ] Image preprocessing (denoise, deskew, threshold)
-- [ ] Multi-language OCR (uk, ru, en)
-- [ ] OCR quality metrics
-- [ ] Batch OCR processing
+  - Multi-language support (uk, ru, en)
+  - Page-by-page processing
+- [ ] Image preprocessing pipeline
+  - Denoise, deskew, threshold
+  - Contrast enhancement
+  - Resolution upscaling for better OCR
+- [ ] Fallback chain implementation:
+  1. Native text extraction (djvutxt, pdftotext)
+  2. Tesseract OCR (if step 1 empty)
+  3. Ollama vision models (if complex layout detected)
+- [ ] OCR quality metrics and confidence scores
+- [ ] Batch processing for multi-page documents
 
 ### Phase 4: Advanced Parsing
 - [ ] PDF structure analysis (pdfcpu)
