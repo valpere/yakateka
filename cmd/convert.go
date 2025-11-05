@@ -13,12 +13,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/valpere/yakateka/internal"
 	"github.com/valpere/yakateka/internal/converter"
-	"github.com/valpere/yakateka/internal/converter/calibre"
-	"github.com/valpere/yakateka/internal/converter/djvu"
-	"github.com/valpere/yakateka/internal/converter/libreoffice"
-	"github.com/valpere/yakateka/internal/converter/pandoc"
+	"github.com/valpere/yakateka/internal/converter/config"
 	"github.com/valpere/yakateka/internal/converter/plaintext"
-	"github.com/valpere/yakateka/internal/converter/postscript"
+	"github.com/valpere/yakateka/internal/helper"
 )
 
 var (
@@ -137,39 +134,30 @@ func runConvert(cmd *cobra.Command, args []string) error {
 	// Create converter factory
 	factory := converter.NewFactory()
 
-	// Register Pandoc converter
-	pandocPath := viper.GetString("converter.pandoc.path")
-	pandocExtraArgs := viper.GetStringSlice("converter.pandoc.extra_args")
-	pandocConverter := pandoc.NewConverter(pandocPath, pandocExtraArgs)
-	factory.Register("pandoc", pandocConverter)
+	// Load converters from configuration
+	converterCfg, cfgErr := config.Load()
+	if cfgErr != nil {
+		log.Warn().Err(cfgErr).Msg("Failed to load converter configuration, falling back to no converters")
+	} else {
+		if cfgErr := factory.LoadFromConfig(converterCfg); cfgErr != nil {
+			log.Error().Err(cfgErr).Msg("Failed to register converters from config")
+			return fmt.Errorf("failed to register converters: %w", cfgErr)
+		}
+	}
 
-	// Register DjVu converter
-	djvutxtPath := viper.GetString("converter.djvu.djvutxt_path")
-	djvupsPath := viper.GetString("converter.djvu.djvups_path")
-	djvuConverter := djvu.NewConverter(djvutxtPath, djvupsPath)
-	factory.Register("djvu", djvuConverter)
-
-	// Register PlainText converter (for TXT → HTML/MD pipeline support)
+	// Register PlainText converter (handled specially, not in config)
 	plaintextConverter := plaintext.NewConverter()
 	factory.Register("plaintext", plaintextConverter)
 
-	// Register PostScript converter (for PS → PDF pipeline support)
-	ps2pdfPath := viper.GetString("converter.postscript.ps2pdf_path")
-	psConverter := postscript.NewConverter(ps2pdfPath)
-	factory.Register("postscript", psConverter)
-
-	// Register LibreOffice converter (for PDF/DOC → HTML/TXT conversion)
-	sofficePath := viper.GetString("converter.libreoffice.soffice_path")
-	libreofficeConverter := libreoffice.NewConverter(sofficePath)
-	factory.Register("libreoffice", libreofficeConverter)
-
-	// Register Calibre converter (for ebook formats: MOBI, EPUB, FB2, etc.)
-	ebookConvertPath := viper.GetString("converter.calibre.ebook_convert_path")
-	calibreConverter := calibre.NewConverter(ebookConvertPath)
-	factory.Register("calibre", calibreConverter)
-
-	// TODO: Register additional converters:
-	// - OCR + Ollama converter
+	// Load and register helper-based converter (with runtime ping check)
+	helperCtx := context.Background()
+	helperConverter, helperErr := helper.LoadAndPing(helperCtx)
+	if helperErr != nil {
+		log.Warn().Err(helperErr).Msg("Failed to load helper system")
+	} else if helperConverter != nil {
+		factory.Register("helpers", helperConverter)
+		log.Info().Msg("Helper system enabled")
+	}
 
 	// Perform conversion with timeout
 	timeoutDuration := time.Duration(timeout) * time.Second
