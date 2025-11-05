@@ -186,6 +186,10 @@ EOF
                 # Normal mode
                 EXTRA_ARGS=()
                 ;;
+            *)
+                # Default to normal mode for unrecognized modes
+                EXTRA_ARGS=()
+                ;;
         esac
 
         # Execute conversion

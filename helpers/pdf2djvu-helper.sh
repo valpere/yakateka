@@ -70,6 +70,10 @@ EOF
                 # Normal mode
                 EXTRA_ARGS=(--dpi=300)
                 ;;
+            *)
+                # Default to normal mode for unrecognized modes
+                EXTRA_ARGS=(--dpi=300)
+                ;;
         esac
 
         # Execute conversion
