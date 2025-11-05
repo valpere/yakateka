@@ -62,9 +62,11 @@ func runHelpers(cmd *cobra.Command, args []string) error {
 		// Convert relative paths to absolute based on current working directory
 		if !filepath.IsAbs(path) {
 			cwd, err := os.Getwd()
-			if err == nil {
-				path = filepath.Join(cwd, path)
+			if err != nil {
+				log.Error().Err(err).Str("helper", path).Msg("Failed to get current working directory for relative helper path")
+				return fmt.Errorf("failed to get current working directory for helper %s: %w", path, err)
 			}
+			path = filepath.Join(cwd, path)
 		}
 		weightFloat, ok := weight.(float64)
 		if !ok {
