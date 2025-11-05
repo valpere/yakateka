@@ -163,7 +163,7 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		return
 	}
 
-	// Calculate column width
+	// Calculate column width (minimum 8 for "FROM\TO" header)
 	maxFormatLen := 0
 	for _, format := range formats {
 		if len(format) > maxFormatLen {
@@ -171,8 +171,8 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		}
 	}
 	colWidth := maxFormatLen
-	if colWidth < 4 {
-		colWidth = 4
+	if colWidth < 8 {
+		colWidth = 8 // Minimum width for "FROM\TO" header
 	}
 
 	// Print title
