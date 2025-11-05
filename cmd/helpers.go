@@ -140,6 +140,12 @@ func runHelpers(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+const (
+	// minColWidth is the minimum column width for format matrix display
+	// Set to 8 to accommodate the "FROM\TO" header (7 chars) plus spacing
+	minColWidth = 8
+)
+
 // displayFormatMatrix prints a matrix showing supported format conversions
 func displayFormatMatrix(cache *helper.HelperCache) {
 	// Collect all unique formats
@@ -163,7 +169,7 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		return
 	}
 
-	// Calculate column width (minimum 8 for "FROM\TO" header)
+	// Calculate column width based on longest format name
 	maxFormatLen := 0
 	for _, format := range formats {
 		if len(format) > maxFormatLen {
@@ -171,8 +177,8 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		}
 	}
 	colWidth := maxFormatLen
-	if colWidth < 8 {
-		colWidth = 8 // Minimum width for "FROM\TO" header
+	if colWidth < minColWidth {
+		colWidth = minColWidth
 	}
 
 	// Print title
