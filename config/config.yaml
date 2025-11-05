@@ -72,25 +72,25 @@ helpers:
     # Format: absolute_path: weight
 
     # Pandoc - Universal markup converter (highest priority for markup)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh: 0.95
+    /home/val/wrk/projects/library/yakateka/helpers/pandoc-helper.sh: 0.95
 
     # Poppler - PDF utilities (high priority for PDF to text/images)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh: 0.90
+    /home/val/wrk/projects/library/yakateka/helpers/poppler-helper.sh: 0.90
 
     # LibreOffice - Office documents (high priority for office formats)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh: 0.85
+    /home/val/wrk/projects/library/yakateka/helpers/libreoffice-helper.sh: 0.85
 
     # Calibre - Ebook converter (high priority for ebook formats)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh: 0.80
+    /home/val/wrk/projects/library/yakateka/helpers/calibre-helper.sh: 0.80
 
     # Ghostscript - PostScript/PDF (medium priority)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh: 0.75
+    /home/val/wrk/projects/library/yakateka/helpers/ghostscript-helper.sh: 0.75
 
     # DjVuLibre - DjVu documents (medium priority)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh: 0.70
+    /home/val/wrk/projects/library/yakateka/helpers/djvulibre-helper.sh: 0.70
 
     # pdf2djvu - PDF to DjVu (lower priority, specialized)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/pdf2djvu-helper.sh: 0.65
+    /home/val/wrk/projects/library/yakateka/helpers/pdf2djvu-helper.sh: 0.65
 
     # AbiWord - Word processor (lowest priority, fallback)
-    /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh: 0.60
+    /home/val/wrk/projects/library/yakateka/helpers/abiword-helper.sh: 0.60
