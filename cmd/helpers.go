@@ -249,7 +249,10 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		fmt.Printf("%-*s │", colWidth, fromFormat)
 		for colIdx, toFormat := range formats {
 			symbol := " "
-			if fromFormat != toFormat {
+			if fromFormat == toFormat {
+				// Same format - show empty set symbol
+				symbol = "∅"
+			} else {
 				// Check if conversion exists (any mode)
 				if toFormats, ok := cache.Conversions[fromFormat]; ok {
 					if modes, ok := toFormats[toFormat]; ok && len(modes) > 0 {
