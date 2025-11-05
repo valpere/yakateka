@@ -70,6 +70,11 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+    md:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
   docx:
     pdf:
       modes:
@@ -167,6 +172,37 @@ EOF
         if [ -z "$MODE" ] || [ -z "$FROM_FORMAT" ] || [ -z "$FROM_FILE" ] || [ -z "$TO_FORMAT" ] || [ -z "$TO_FILE" ]; then
             echo "Usage: $0 convert <mode> <from_format> <from_file> <to_format> <to_file>" >&2
             exit 1
+        fi
+
+        # Special case: DOC → MD requires pipeline (DOC → DOCX → MD)
+        if [ "$FROM_FORMAT" = "doc" ] && [ "$TO_FORMAT" = "md" ]; then
+            # Create temporary DOCX file
+            TEMP_DOCX=$(mktemp --suffix=.docx)
+            trap 'rm -f "$TEMP_DOCX"' EXIT
+
+            # Step 1: DOC → DOCX using LibreOffice
+            OUTDIR=$(dirname "$TEMP_DOCX")
+            BASENAME=$(basename "$FROM_FILE" ".doc")
+            "$LIBREOFFICE_BIN" --headless --convert-to docx --outdir "$OUTDIR" "$FROM_FILE"
+
+            EXPECTED_DOCX="$OUTDIR/${BASENAME}.docx"
+            if [ -f "$EXPECTED_DOCX" ]; then
+                mv "$EXPECTED_DOCX" "$TEMP_DOCX"
+            fi
+
+            if [ ! -f "$TEMP_DOCX" ]; then
+                echo "Failed to convert DOC to DOCX" >&2
+                exit 1
+            fi
+
+            # Step 2: DOCX → MD using Pandoc
+            if ! command -v pandoc >/dev/null 2>&1; then
+                echo "Pandoc not found, cannot complete DOC → MD conversion" >&2
+                exit 1
+            fi
+
+            pandoc -f docx -t markdown -o "$TO_FILE" "$TEMP_DOCX"
+            exit $?
         fi
 
         # Get output directory and basename
