@@ -148,7 +148,7 @@ const (
 
 // displayFormatMatrix prints a matrix showing supported format conversions
 func displayFormatMatrix(cache *helper.HelperCache) {
-	// Collect all unique formats
+	// Collect all unique formats that have at least one conversion
 	formatSet := make(map[string]bool)
 	for fromFormat := range cache.Conversions {
 		formatSet[fromFormat] = true
@@ -157,12 +157,40 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		}
 	}
 
-	// Convert to sorted slice
-	formats := make([]string, 0, len(formatSet))
+	// Convert to sorted slice and filter out formats with no conversions
+	allFormats := make([]string, 0, len(formatSet))
 	for format := range formatSet {
-		formats = append(formats, format)
+		allFormats = append(allFormats, format)
 	}
-	sort.Strings(formats)
+	sort.Strings(allFormats)
+
+	// Build two sets: formats that can be sources and formats that can be targets
+	sourceFormats := make(map[string]bool)
+	targetFormats := make(map[string]bool)
+
+	for fromFormat, toFormats := range cache.Conversions {
+		hasOutgoing := false
+		for toFormat, modes := range toFormats {
+			for _, helpers := range modes {
+				if len(helpers) > 0 {
+					hasOutgoing = true
+					targetFormats[toFormat] = true
+				}
+			}
+		}
+		if hasOutgoing {
+			sourceFormats[fromFormat] = true
+		}
+	}
+
+	// Keep formats that appear as BOTH source AND target
+	// This removes columns with no incoming conversions and rows with no outgoing conversions
+	formats := make([]string, 0)
+	for _, format := range allFormats {
+		if sourceFormats[format] && targetFormats[format] {
+			formats = append(formats, format)
+		}
+	}
 
 	if len(formats) == 0 {
 		fmt.Println("No formats available")
