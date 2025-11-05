@@ -17,10 +17,23 @@ case "$1" in
         ;;
 
     info)
-        cat <<'EOF'
+        # Check if Pandoc is available for DOC→MD pipeline
+        HAS_PANDOC=false
+        if command -v pandoc >/dev/null 2>&1; then
+            HAS_PANDOC=true
+        fi
+
+        # Set description based on Pandoc availability
+        if [ "$HAS_PANDOC" = true ]; then
+            DESCRIPTION="Converts office documents using LibreOffice (DOC→MD via Pandoc pipeline)"
+        else
+            DESCRIPTION="Converts office documents using LibreOffice"
+        fi
+
+        cat <<EOF
 name: "LibreOffice Converter"
 version: "1.0.0"
-description: "Converts office documents using LibreOffice"
+description: "$DESCRIPTION"
 capabilities:
   pdf:
     html:
@@ -70,11 +83,20 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+EOF
+
+        # Conditionally add DOC→MD if Pandoc is available
+        if [ "$HAS_PANDOC" = true ]; then
+            cat <<'EOF'
     md:
       modes:
         normal:
           speed: 1
           quality: 1
+EOF
+        fi
+
+        cat <<'EOF'
   docx:
     pdf:
       modes:
