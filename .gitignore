@@ -36,3 +36,6 @@ dist/
 .vscode/
 
 tmp/
+
+# Generated helper cache (contains user-specific paths)
+helpers.yaml

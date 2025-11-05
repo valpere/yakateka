@@ -3,6 +3,8 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -54,6 +56,18 @@ func runHelpers(cmd *cobra.Command, args []string) error {
 
 	// Register all helpers
 	for path, weight := range helperWeights {
+		// Expand environment variables in path (e.g., ${HOME}/path)
+		path = os.ExpandEnv(path)
+
+		// Convert relative paths to absolute based on current working directory
+		if !filepath.IsAbs(path) {
+			cwd, err := os.Getwd()
+			if err != nil {
+				log.Error().Err(err).Str("helper", path).Msg("Failed to get current working directory for relative helper path")
+				return fmt.Errorf("failed to get current working directory for helper %s: %w", path, err)
+			}
+			path = filepath.Join(cwd, path)
+		}
 		weightFloat, ok := weight.(float64)
 		if !ok {
 			log.Warn().

@@ -67,8 +67,32 @@ logging:
 helpers:
   cache_file: helpers.yaml    # Generated cache file
   weights:
-    # Add your helper scripts here with weights (0.0 to 1.0)
+    # Helper scripts with weights (0.0 to 1.0)
     # Higher weight = higher priority
-    # Example:
-    # /usr/local/bin/pandoc-helper.sh: 0.9
-    # /usr/local/bin/calibre-helper.sh: 0.8
+    # Format: path: weight
+    # Paths support environment variable expansion: ${VAR}/path
+    # Set PROJECT_ROOT environment variable or use absolute paths
+
+    # Pandoc - Universal markup converter (highest priority for markup)
+    helpers/pandoc-helper.sh: 0.95
+
+    # Poppler - PDF utilities (high priority for PDF to text/images)
+    helpers/poppler-helper.sh: 0.90
+
+    # LibreOffice - Office documents (high priority for office formats)
+    helpers/libreoffice-helper.sh: 0.85
+
+    # Calibre - Ebook converter (high priority for ebook formats)
+    helpers/calibre-helper.sh: 0.80
+
+    # Ghostscript - PostScript/PDF (medium priority)
+    helpers/ghostscript-helper.sh: 0.75
+
+    # DjVuLibre - DjVu documents (medium priority)
+    helpers/djvulibre-helper.sh: 0.70
+
+    # pdf2djvu - PDF to DjVu (lower priority, specialized)
+    helpers/pdf2djvu-helper.sh: 0.65
+
+    # AbiWord - Word processor (lowest priority, fallback)
+    helpers/abiword-helper.sh: 0.60
