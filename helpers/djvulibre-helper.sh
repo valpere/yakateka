@@ -23,19 +23,29 @@ capabilities:
   djvu:
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     ps:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     png:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     tiff:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;

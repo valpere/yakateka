@@ -23,25 +23,43 @@ capabilities:
   pdf:
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
-        fast: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        fast:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     ps:
       modes:
-        normal: {speed: 1, quality: 1}
-        quality: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        quality:
+          speed: 1
+          quality: 1
     png:
       modes:
-        normal: {speed: 1, quality: 1}
-        quality: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        quality:
+          speed: 1
+          quality: 1
     svg:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     ppm:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;

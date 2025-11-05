@@ -23,28 +23,44 @@ capabilities:
   ps:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
-        quality: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        quality:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     eps:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   pdf:
     ps:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   eps:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     ps:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;

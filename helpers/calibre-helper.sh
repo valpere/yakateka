@@ -25,84 +25,136 @@ capabilities:
   mobi:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
-        quality: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        quality:
+          speed: 1
+          quality: 1
     fb2:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   epub:
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
-        quality: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
+        quality:
+          speed: 1
+          quality: 1
     fb2:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   fb2:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   azw:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   azw3:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   lit:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   pdb:
     epub:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     mobi:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;

@@ -25,81 +25,129 @@ capabilities:
   pdf:
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   ps:
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   doc:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     docx:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     odt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   docx:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     odt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     rtf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   odt:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     docx:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     rtf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
   rtf:
     pdf:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     html:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     txt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     docx:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
     odt:
       modes:
-        normal: {speed: 1, quality: 1}
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;
