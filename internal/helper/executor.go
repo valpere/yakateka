@@ -115,22 +115,16 @@ func (e *Executor) GetInfo(ctx context.Context, helperPath string) (*HelperInfo,
 
 // Convert executes a conversion using the helper
 func (e *Executor) Convert(ctx context.Context, helperPath string, mode ConversionMode, fromFormat, fromFile, toFormat, toFile string) error {
-	// Respect parent context deadline if it's shorter than our timeout
+	// Apply timeout only if parent doesn't have a shorter deadline
 	var cancel context.CancelFunc
-	if deadline, ok := ctx.Deadline(); ok {
-		remaining := deadline.Sub(time.Now())
-		if remaining < e.timeout {
-			// Parent has shorter deadline, use it as-is
-			ctx, cancel = context.WithCancel(ctx)
-		} else {
-			// Parent has longer deadline, apply our timeout
-			ctx, cancel = context.WithTimeout(ctx, e.timeout)
-		}
-	} else {
-		// No parent deadline, apply our timeout
+	deadline, hasDeadline := ctx.Deadline()
+	timeoutDeadline := time.Now().Add(e.timeout)
+
+	// Only create new context with timeout if needed
+	if !hasDeadline || timeoutDeadline.Before(deadline) {
 		ctx, cancel = context.WithTimeout(ctx, e.timeout)
+		defer cancel()
 	}
-	defer cancel()
 
 	cmd := exec.CommandContext(ctx, helperPath, "convert", string(mode), fromFormat, fromFile, toFormat, toFile)
 

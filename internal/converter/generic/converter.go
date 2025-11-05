@@ -200,11 +200,9 @@ func (c *Converter) validateBinaryPath(binaryPath string) error {
 		if info.IsDir() {
 			return fmt.Errorf("binary path is a directory: %s", binaryPath)
 		}
-		// On Unix-like systems, check if file is executable
-		if info.Mode()&0111 == 0 {
-			log.Warn().
-				Str("binary", binaryPath).
-				Msg("Binary may not be executable (no execute permission)")
+		// Check executable permissions (platform-specific)
+		if err := checkExecutable(info, binaryPath); err != nil {
+			return err
 		}
 		return nil
 	}

@@ -114,12 +114,17 @@ converters:
 
   # Plain text converter is registered separately in code (not via config)
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# EXAMPLES BELOW ARE FOR EDUCATIONAL PURPOSES ONLY - DO NOT UNCOMMENT AS-IS
+# ═══════════════════════════════════════════════════════════════════════════════
+#
 # Example: Additional tools that can be easily added
 #
 # ⚠️  IMPORTANT: Shell redirections (>, |, &&, etc.) DO NOT work in command_template
 # because exec.Command doesn't invoke a shell. For commands requiring shell features,
 # use a helper script instead (see docs/HELPERS.md - recommended approach).
 #
+# These examples demonstrate both correct and incorrect approaches:
 #  pdftotext:
 #    binary: /usr/bin/pdftotext
 #    command_template: "{binary} -layout {input} {output}"

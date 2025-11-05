@@ -92,18 +92,20 @@ func initConfig() {
 
 	// Also try to load converters.yaml from the same directory
 	// Use a separate viper instance to avoid side effects on the main config
-	convertersFile := filepath.Join(filepath.Dir(viper.ConfigFileUsed()), "converters.yaml")
-	if _, err := os.Stat(convertersFile); err == nil {
-		convertersViper := viper.New()
-		convertersViper.SetConfigFile(convertersFile)
-		if err := convertersViper.ReadInConfig(); err != nil {
-			log.Warn().Err(err).Str("file", convertersFile).Msg("Failed to read converters config")
-		} else {
-			// Merge the converters config into the main viper instance
-			if err := viper.MergeConfigMap(convertersViper.AllSettings()); err != nil {
-				log.Warn().Err(err).Str("file", convertersFile).Msg("Failed to merge converters config")
+	if configFile := viper.ConfigFileUsed(); configFile != "" {
+		convertersFile := filepath.Join(filepath.Dir(configFile), "converters.yaml")
+		if _, err := os.Stat(convertersFile); err == nil {
+			convertersViper := viper.New()
+			convertersViper.SetConfigFile(convertersFile)
+			if err := convertersViper.ReadInConfig(); err != nil {
+				log.Warn().Err(err).Str("file", convertersFile).Msg("Failed to read converters config")
 			} else {
-				log.Debug().Str("config", convertersFile).Msg("Merged converters config")
+				// Merge the converters config into the main viper instance
+				if err := viper.MergeConfigMap(convertersViper.AllSettings()); err != nil {
+					log.Warn().Err(err).Str("file", convertersFile).Msg("Failed to merge converters config")
+				} else {
+					log.Debug().Str("config", convertersFile).Msg("Merged converters config")
+				}
 			}
 		}
 	}
