@@ -69,6 +69,16 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+    doc:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    odt:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
   rtf:
     pdf:
       modes:
@@ -90,6 +100,16 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+    docx:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    odt:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
   odt:
     pdf:
       modes:
@@ -107,6 +127,16 @@ capabilities:
           speed: 1
           quality: 1
     doc:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    docx:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    rtf:
       modes:
         normal:
           speed: 1

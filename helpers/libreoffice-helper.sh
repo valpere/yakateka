@@ -148,6 +148,11 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+    doc:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;
