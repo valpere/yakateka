@@ -5,11 +5,17 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/valpere/yakateka/internal/helper"
+)
+
+var (
+	showFormatsMatrix bool
 )
 
 // helpersCmd represents the helpers command
@@ -24,12 +30,15 @@ This command:
 3. Queries each helper for capabilities (helper.sh info)
 4. Generates helpers.yaml with sorted helper lists
 
-The cache file is used at runtime for fast helper lookup.`,
+The cache file is used at runtime for fast helper lookup.
+
+Use --formats to display a matrix of supported format conversions.`,
 	RunE: runHelpers,
 }
 
 func init() {
 	rootCmd.AddCommand(helpersCmd)
+	helpersCmd.Flags().BoolVar(&showFormatsMatrix, "formats", false, "Display format conversion matrix")
 }
 
 func runHelpers(cmd *cobra.Command, args []string) error {
@@ -122,5 +131,86 @@ func runHelpers(cmd *cobra.Command, args []string) error {
 	fmt.Printf("✓ Generated helper cache: %s\n", cacheFile)
 	fmt.Printf("  %d conversion paths available\n", conversionsCount)
 
+	// Display format matrix if requested
+	if showFormatsMatrix {
+		fmt.Println()
+		displayFormatMatrix(cache)
+	}
+
 	return nil
+}
+
+// displayFormatMatrix prints a matrix showing supported format conversions
+func displayFormatMatrix(cache *helper.HelperCache) {
+	// Collect all unique formats
+	formatSet := make(map[string]bool)
+	for fromFormat := range cache.Conversions {
+		formatSet[fromFormat] = true
+		for toFormat := range cache.Conversions[fromFormat] {
+			formatSet[toFormat] = true
+		}
+	}
+
+	// Convert to sorted slice
+	formats := make([]string, 0, len(formatSet))
+	for format := range formatSet {
+		formats = append(formats, format)
+	}
+	sort.Strings(formats)
+
+	if len(formats) == 0 {
+		fmt.Println("No formats available")
+		return
+	}
+
+	// Calculate column width
+	maxFormatLen := 0
+	for _, format := range formats {
+		if len(format) > maxFormatLen {
+			maxFormatLen = len(format)
+		}
+	}
+	colWidth := maxFormatLen
+	if colWidth < 4 {
+		colWidth = 4
+	}
+
+	// Print title
+	fmt.Println("Format Conversion Matrix:")
+	fmt.Println("(✓ = conversion supported)")
+	fmt.Println()
+
+	// Print header row
+	fmt.Printf("%-*s │", colWidth, "FROM\\TO")
+	for _, toFormat := range formats {
+		fmt.Printf(" %-*s", colWidth, toFormat)
+	}
+	fmt.Println()
+
+	// Print separator
+	fmt.Print(strings.Repeat("─", colWidth))
+	fmt.Print("─┼")
+	for range formats {
+		fmt.Print("─")
+		fmt.Print(strings.Repeat("─", colWidth))
+	}
+	fmt.Println()
+
+	// Print matrix rows
+	for _, fromFormat := range formats {
+		fmt.Printf("%-*s │", colWidth, fromFormat)
+		for _, toFormat := range formats {
+			symbol := " "
+			if fromFormat != toFormat {
+				// Check if conversion exists (any mode)
+				if toFormats, ok := cache.Conversions[fromFormat]; ok {
+					if modes, ok := toFormats[toFormat]; ok && len(modes) > 0 {
+						symbol = "✓"
+					}
+				}
+			}
+			fmt.Printf(" %-*s", colWidth, symbol)
+		}
+		fmt.Println()
+	}
 }

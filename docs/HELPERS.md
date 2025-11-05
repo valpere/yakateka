@@ -179,6 +179,28 @@ Output:
   42 conversion paths available
 ```
 
+**View format matrix** (optional):
+```bash
+yakateka helpers --formats
+```
+
+Output:
+```
+Format Conversion Matrix:
+(✓ = conversion supported)
+
+FROM\TO │ azw  epub fb2  html md   mobi pdf  txt
+────────┼─────────────────────────────────────
+azw     │           ✓              ✓         ✓
+epub    │      ✓    ✓    ✓    ✓    ✓    ✓    ✓
+fb2     │      ✓         ✓    ✓    ✓    ✓    ✓
+html    │      ✓    ✓         ✓    ✓    ✓    ✓
+md      │      ✓    ✓    ✓         ✓    ✓    ✓
+mobi    │      ✓    ✓    ✓    ✓         ✓    ✓
+pdf     │                                ✓    ✓
+txt     │
+```
+
 ### 4. Use for Conversions
 
 ```bash

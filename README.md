@@ -127,6 +127,7 @@ make install
 - 🔄 **Automatic fallback**: Try helpers by weight until success
 - 🎯 **Failure tracking**: Failed helpers skipped for specific conversions
 - 🔌 **Pipeline support**: Implement multi-step conversions inside helpers
+- 📊 **Format matrix**: View all supported conversions with `yakateka helpers --formats`
 - 📚 **See**: `docs/HELPERS.md` for complete guide
 - 📖 **Example**: `examples/helpers/pandoc-helper.sh`
 
@@ -157,6 +158,9 @@ yakateka --help
 
 # Show version
 yakateka --version
+
+# Generate helpers cache and show format matrix
+yakateka helpers --formats
 
 # Document conversion (direct conversion)
 yakateka convert document.epub document.txt  # EPUB to text
