@@ -80,7 +80,7 @@ EOF
                 # Convert DjVu to PDF via PostScript
                 if command -v djvups >/dev/null 2>&1 && command -v ps2pdf >/dev/null 2>&1; then
                     TEMP_PS=$(mktemp --suffix=.ps)
-                    trap "rm -f $TEMP_PS" EXIT
+                    trap 'rm -f "$TEMP_PS"' EXIT
 
                     djvups -o "$TEMP_PS" "$FROM_FILE"
                     ps2pdf "$TEMP_PS" "$TO_FILE"

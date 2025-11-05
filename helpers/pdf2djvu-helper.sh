@@ -56,24 +56,24 @@ EOF
         fi
 
         # Build pdf2djvu command based on mode
-        EXTRA_ARGS=""
+        EXTRA_ARGS=()
         case "$MODE" in
             quality)
                 # High quality mode
-                EXTRA_ARGS="--dpi=600 --loss-level=0"
+                EXTRA_ARGS=(--dpi=600 --loss-level=0)
                 ;;
             fast)
                 # Fast mode - lower DPI
-                EXTRA_ARGS="--dpi=150 --loss-level=100"
+                EXTRA_ARGS=(--dpi=150 --loss-level=100)
                 ;;
             normal)
                 # Normal mode
-                EXTRA_ARGS="--dpi=300"
+                EXTRA_ARGS=(--dpi=300)
                 ;;
         esac
 
         # Execute conversion
-        "$PDF2DJVU_BIN" -o "$TO_FILE" $EXTRA_ARGS "$FROM_FILE"
+        "$PDF2DJVU_BIN" -o "$TO_FILE" "${EXTRA_ARGS[@]}" "$FROM_FILE"
         exit $?
         ;;
 

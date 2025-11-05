@@ -172,24 +172,24 @@ EOF
         fi
 
         # Build ebook-convert command based on mode
-        EXTRA_ARGS=""
+        EXTRA_ARGS=()
         case "$MODE" in
             quality)
                 # High quality mode - pretty-print and preserve formatting
-                EXTRA_ARGS="--pretty-print --preserve-cover-aspect-ratio"
+                EXTRA_ARGS=(--pretty-print --preserve-cover-aspect-ratio)
                 ;;
             fast)
                 # Fast mode - minimal processing
-                EXTRA_ARGS="--no-inline-toc"
+                EXTRA_ARGS=(--no-inline-toc)
                 ;;
             normal)
                 # Normal mode
-                EXTRA_ARGS=""
+                EXTRA_ARGS=()
                 ;;
         esac
 
         # Execute conversion
-        "$EBOOK_CONVERT_BIN" "$FROM_FILE" "$TO_FILE" $EXTRA_ARGS
+        "$EBOOK_CONVERT_BIN" "$FROM_FILE" "$TO_FILE" "${EXTRA_ARGS[@]}"
         exit $?
         ;;
 

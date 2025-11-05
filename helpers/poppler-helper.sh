@@ -94,7 +94,7 @@ EOF
                 if command -v pdftohtml >/dev/null 2>&1; then
                     # pdftohtml creates output.html, need to handle this
                     TEMP_DIR=$(mktemp -d)
-                    trap "rm -rf $TEMP_DIR" EXIT
+                    trap 'rm -rf "$TEMP_DIR"' EXIT
 
                     pdftohtml -noframes -s "$FROM_FILE" "$TEMP_DIR/output.html"
                     mv "$TEMP_DIR/output.html" "$TO_FILE"

@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -54,6 +55,16 @@ func runHelpers(cmd *cobra.Command, args []string) error {
 
 	// Register all helpers
 	for path, weight := range helperWeights {
+		// Expand environment variables in path (e.g., ${HOME}/path)
+		path = os.ExpandEnv(path)
+
+		// Convert relative paths to absolute based on current working directory
+		if !filepath.IsAbs(path) {
+			cwd, err := os.Getwd()
+			if err == nil {
+				path = filepath.Join(cwd, path)
+			}
+		}
 		weightFloat, ok := weight.(float64)
 		if !ok {
 			log.Warn().
