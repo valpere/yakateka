@@ -15,6 +15,7 @@ import (
 	"github.com/valpere/yakateka/internal/converter"
 	"github.com/valpere/yakateka/internal/converter/config"
 	"github.com/valpere/yakateka/internal/converter/plaintext"
+	"github.com/valpere/yakateka/internal/helper"
 )
 
 var (
@@ -147,6 +148,16 @@ func runConvert(cmd *cobra.Command, args []string) error {
 	// Register PlainText converter (handled specially, not in config)
 	plaintextConverter := plaintext.NewConverter()
 	factory.Register("plaintext", plaintextConverter)
+
+	// Load and register helper-based converter (with runtime ping check)
+	helperCtx := context.Background()
+	helperConverter, helperErr := helper.LoadAndPing(helperCtx)
+	if helperErr != nil {
+		log.Warn().Err(helperErr).Msg("Failed to load helper system")
+	} else if helperConverter != nil {
+		factory.Register("helpers", helperConverter)
+		log.Info().Msg("Helper system enabled")
+	}
 
 	// Perform conversion with timeout
 	timeoutDuration := time.Duration(timeout) * time.Second

@@ -121,12 +121,22 @@ make install
 - Includes AZW, AZW3, LIT, PDB and many more ebook formats
 - Quality options: `--quality high` for pretty-print output
 
-**Declarative Converter Configuration** (✅ **NEW!**):
+**Helper System** (✅ **NEW!**):
+- 🚀 **External scripts as converters** - Write helpers in any language
+- 📝 **Simple interface**: `ping`, `info`, `convert` commands
+- 🔄 **Automatic fallback**: Try helpers by weight until success
+- 🎯 **Failure tracking**: Failed helpers skipped for specific conversions
+- 🔌 **Pipeline support**: Implement multi-step conversions inside helpers
+- 📚 **See**: `docs/HELPERS.md` for complete guide
+- 📖 **Example**: `examples/helpers/pandoc-helper.sh`
+
+**Declarative Converter Configuration** (Legacy):
 - 🎯 **Add converters without code changes** - Edit `config/converters.yaml`
 - 📋 **Profiles**: Reusable command templates (`simple_io`, `pandoc_style`, `libreoffice_style`)
 - 🔧 **Format mapping**: Map internal names to tool-specific names
 - ⚙️  **Conversion overrides**: Per-format customization with wildcards
 - 📚 **See**: `docs/CONVERTER_CONFIGURATION.md` for complete guide
+- ⚠️  **Note**: Helper system is recommended for new converters
 
 **Future Converters**:
 - **OCR + AI Pipeline** (Phase 3):

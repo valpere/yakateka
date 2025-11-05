@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/google/shlex"
 	"github.com/rs/zerolog/log"
 	"github.com/valpere/yakateka/internal"
 	"github.com/valpere/yakateka/internal/converter/config"
@@ -188,9 +189,15 @@ func (c *Converter) buildCommand(input, output string, opts internal.ConversionO
 }
 
 // executeCommand executes the command string
+// Uses shlex to properly handle quoted arguments like --option="value with spaces"
 func (c *Converter) executeCommand(ctx context.Context, cmdStr string) ([]byte, error) {
-	// Split command into parts
-	parts := strings.Fields(cmdStr)
+	// Split command into parts using shell word splitting
+	// This properly handles quoted strings and escaped characters
+	parts, err := shlex.Split(cmdStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse command: %w", err)
+	}
+
 	if len(parts) == 0 {
 		return nil, fmt.Errorf("empty command")
 	}

@@ -116,6 +116,10 @@ converters:
 
 # Example: Additional tools that can be easily added
 #
+# ⚠️  IMPORTANT: Shell redirections (>, |, &&, etc.) DO NOT work in command_template
+# because exec.Command doesn't invoke a shell. For commands requiring shell features,
+# use a helper script instead (see docs/HELPERS.md - recommended approach).
+#
 #  pdftotext:
 #    binary: /usr/bin/pdftotext
 #    command_template: "{binary} -layout {input} {output}"
@@ -124,22 +128,14 @@ converters:
 #      input: [pdf]
 #      output: [txt]
 #
-#  antiword:
-#    binary: /usr/bin/antiword
-#    command_template: "{binary} {input} > {output}"
-#    timeout: 60
-#    formats:
-#      input: [doc]
-#      output: [txt]
+#  # ❌ WRONG - shell redirection doesn't work in exec.Command:
+#  # antiword:
+#  #   command_template: "{binary} {input} > {output}"
 #
-#  catdoc:
-#    binary: /usr/bin/catdoc
-#    command_template: "{binary} {input} > {output}"
-#    timeout: 60
-#    formats:
-#      input: [doc]
-#      output: [txt]
+#  # ✅ CORRECT - Use helper script instead (recommended):
+#  # See examples/helpers/pandoc-helper.sh for a complete example
 #
+#  # Or use profile with direct output:
 #  wvText:
 #    binary: /usr/bin/wvText
 #    command_template: "{binary} {input} {output}"
