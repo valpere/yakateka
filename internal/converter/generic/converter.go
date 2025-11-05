@@ -188,6 +188,42 @@ func (c *Converter) buildCommand(input, output string, opts internal.ConversionO
 	return cmdStr, nil
 }
 
+// validateBinaryPath checks if the binary path is safe to execute
+func (c *Converter) validateBinaryPath(binaryPath string) error {
+	// Check if path is absolute
+	if filepath.IsAbs(binaryPath) {
+		// Verify the file exists and is executable
+		info, err := os.Stat(binaryPath)
+		if err != nil {
+			return fmt.Errorf("binary not found: %w", err)
+		}
+		if info.IsDir() {
+			return fmt.Errorf("binary path is a directory: %s", binaryPath)
+		}
+		// On Unix-like systems, check if file is executable
+		if info.Mode()&0111 == 0 {
+			log.Warn().
+				Str("binary", binaryPath).
+				Msg("Binary may not be executable (no execute permission)")
+		}
+		return nil
+	}
+
+	// If not absolute, it should be in PATH
+	// exec.LookPath will search PATH for us
+	fullPath, err := exec.LookPath(binaryPath)
+	if err != nil {
+		return fmt.Errorf("binary not found in PATH: %w", err)
+	}
+
+	log.Debug().
+		Str("binary", binaryPath).
+		Str("resolved", fullPath).
+		Msg("Resolved binary path")
+
+	return nil
+}
+
 // executeCommand executes the command string
 // Uses shlex to properly handle quoted arguments like --option="value with spaces"
 func (c *Converter) executeCommand(ctx context.Context, cmdStr string) ([]byte, error) {
@@ -200,6 +236,11 @@ func (c *Converter) executeCommand(ctx context.Context, cmdStr string) ([]byte, 
 
 	if len(parts) == 0 {
 		return nil, fmt.Errorf("empty command")
+	}
+
+	// Validate binary path before execution
+	if err := c.validateBinaryPath(parts[0]); err != nil {
+		return nil, fmt.Errorf("binary validation failed: %w", err)
 	}
 
 	cmd := exec.CommandContext(ctx, parts[0], parts[1:]...)

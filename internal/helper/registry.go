@@ -226,6 +226,34 @@ func (cache *HelperCache) MarkHelperFailed(from, to internal.DocumentFormat, hel
 		Msg("Marked helper as failed for this conversion")
 }
 
+// MarkHelperGloballyFailed marks a helper as unavailable for all conversions
+// This is more efficient than calling MarkHelperFailed for each conversion pair
+func (cache *HelperCache) MarkHelperGloballyFailed(helperPath string) {
+	conversionCount := 0
+
+	// Remove helper from all conversions and modes
+	for fromFormat, toFormats := range cache.Conversions {
+		for toFormat, modes := range toFormats {
+			for mode, helpers := range modes {
+				filtered := make([]CacheEntry, 0, len(helpers))
+				for _, h := range helpers {
+					if h.Helper != helperPath {
+						filtered = append(filtered, h)
+					} else {
+						conversionCount++
+					}
+				}
+				cache.Conversions[fromFormat][toFormat][mode] = filtered
+			}
+		}
+	}
+
+	log.Debug().
+		Str("helper", helperPath).
+		Int("conversions_removed", conversionCount).
+		Msg("Marked helper as globally failed")
+}
+
 // GetTimeout returns default timeout for helper operations
 func GetTimeout() time.Duration {
 	return 10 * time.Second // Default timeout for info/ping

@@ -6,7 +6,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
-	"github.com/valpere/yakateka/internal"
 )
 
 // LoadAndPing loads helpers.yaml cache and pings all helpers
@@ -74,16 +73,8 @@ func LoadAndPing(ctx context.Context) (*HelperConverter, error) {
 				Str("helper", helperPath).
 				Msg("Helper ping failed, will be excluded")
 
-			// Mark all conversions using this helper as failed
-			for fromFormat, toFormats := range cache.Conversions {
-				for toFormat := range toFormats {
-					cache.MarkHelperFailed(
-						internal.DocumentFormat(fromFormat),
-						internal.DocumentFormat(toFormat),
-						helperPath,
-					)
-				}
-			}
+			// Mark helper as globally failed (more efficient than per-conversion)
+			cache.MarkHelperGloballyFailed(helperPath)
 		}
 	}
 
