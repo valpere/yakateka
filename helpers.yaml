@@ -1,0 +1,393 @@
+conversions:
+    azw:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    azw3:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    djvu:
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh
+                  weight: 0.7
+        png:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh
+                  weight: 0.7
+        ps:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh
+                  weight: 0.7
+        tiff:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh
+                  weight: 0.7
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/djvulibre-helper.sh
+                  weight: 0.7
+    doc:
+        docx:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        odt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        rtf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+    docx:
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        md:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        odt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        rtf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+    eps:
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+        ps:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+    epub:
+        fb2:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        md:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    fb2:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    html:
+        docx:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        md:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+    lit:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    md:
+        docx:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        html:
+            fast:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pandoc-helper.sh
+                  weight: 0.95
+    mobi:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        fb2:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    odt:
+        doc:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        docx:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        rtf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+    pdb:
+        epub:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+        mobi:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/calibre-helper.sh
+                  weight: 0.8
+    pdf:
+        djvu:
+            fast:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pdf2djvu-helper.sh
+                  weight: 0.65
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pdf2djvu-helper.sh
+                  weight: 0.65
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/pdf2djvu-helper.sh
+                  weight: 0.65
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        png:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+        ppm:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+        ps:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+        svg:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+        txt:
+            fast:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/poppler-helper.sh
+                  weight: 0.9
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+    ps:
+        eps:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+            quality:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/ghostscript-helper.sh
+                  weight: 0.75
+    rtf:
+        doc:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        docx:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        html:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        odt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+        pdf:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
+        txt:
+            normal:
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/libreoffice-helper.sh
+                  weight: 0.85
+                - helper: /home/val/wrk/projects/library/yakateka/examples/helpers/abiword-helper.sh
+                  weight: 0.6
