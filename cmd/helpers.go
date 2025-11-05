@@ -214,26 +214,40 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 	fmt.Println("(✓ = conversion supported)")
 	fmt.Println()
 
+	// Helper function to print separator row
+	printSeparator := func() {
+		fmt.Print(strings.Repeat("─", colWidth))
+		fmt.Print("─┼")
+		for i := range formats {
+			fmt.Print(strings.Repeat("─", colWidth))
+			if i < len(formats)-1 {
+				fmt.Print("─┼")
+			} else {
+				fmt.Print("─")
+			}
+		}
+		fmt.Println()
+	}
+
 	// Print header row
 	fmt.Printf("%-*s │", colWidth, "FROM\\TO")
-	for _, toFormat := range formats {
-		fmt.Printf(" %-*s", colWidth, toFormat)
+	for i, toFormat := range formats {
+		fmt.Printf(" %-*s", colWidth-1, toFormat)
+		if i < len(formats)-1 {
+			fmt.Print(" │")
+		} else {
+			fmt.Print(" ")
+		}
 	}
 	fmt.Println()
 
-	// Print separator
-	fmt.Print(strings.Repeat("─", colWidth))
-	fmt.Print("─┼")
-	for range formats {
-		fmt.Print("─")
-		fmt.Print(strings.Repeat("─", colWidth))
-	}
-	fmt.Println()
+	// Print header separator
+	printSeparator()
 
 	// Print matrix rows
-	for _, fromFormat := range formats {
+	for rowIdx, fromFormat := range formats {
 		fmt.Printf("%-*s │", colWidth, fromFormat)
-		for _, toFormat := range formats {
+		for colIdx, toFormat := range formats {
 			symbol := " "
 			if fromFormat != toFormat {
 				// Check if conversion exists (any mode)
@@ -243,8 +257,18 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 					}
 				}
 			}
-			fmt.Printf(" %-*s", colWidth, symbol)
+			fmt.Printf(" %-*s", colWidth-1, symbol)
+			if colIdx < len(formats)-1 {
+				fmt.Print(" │")
+			} else {
+				fmt.Print(" ")
+			}
 		}
 		fmt.Println()
+
+		// Print row separator (except after last row)
+		if rowIdx < len(formats)-1 {
+			printSeparator()
+		}
 	}
 }
