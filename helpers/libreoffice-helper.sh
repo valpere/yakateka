@@ -198,8 +198,8 @@ EOF
 
         # Special case: DOC → MD requires pipeline (DOC → DOCX → MD)
         if [ "$FROM_FORMAT" = "doc" ] && [ "$TO_FORMAT" = "md" ]; then
-            # Create temporary DOCX file
-            TEMP_DOCX=$(mktemp --suffix=.docx)
+            # Create temporary DOCX file (portable across GNU/BSD/macOS)
+            TEMP_DOCX=$(mktemp "${TMPDIR:-/tmp}/tmp.XXXXXX.docx")
             trap 'rm -f "$TEMP_DOCX"' EXIT
 
             # Step 1: DOC → DOCX using LibreOffice

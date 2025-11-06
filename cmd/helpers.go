@@ -253,10 +253,15 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 				// Same format - show dash to indicate not applicable
 				symbol = "-"
 			} else {
-				// Check if conversion exists (any mode)
+				// Check if conversion exists (any mode with actual helpers)
 				if toFormats, ok := cache.Conversions[fromFormat]; ok {
-					if modes, ok := toFormats[toFormat]; ok && len(modes) > 0 {
-						symbol = "✓"
+					if modes, ok := toFormats[toFormat]; ok {
+						for _, helpers := range modes {
+							if len(helpers) > 0 {
+								symbol = "✓"
+								break
+							}
+						}
 					}
 				}
 			}
