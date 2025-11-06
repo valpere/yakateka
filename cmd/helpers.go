@@ -185,7 +185,7 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 
 	// Keep formats that appear as BOTH source AND target
 	// This removes columns with no incoming conversions and rows with no outgoing conversions
-	formats := make([]string, 0)
+	formats := make([]string, 0, len(allFormats))
 	for _, format := range allFormats {
 		if sourceFormats[format] && targetFormats[format] {
 			formats = append(formats, format)
