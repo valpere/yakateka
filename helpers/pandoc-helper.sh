@@ -101,6 +101,70 @@ capabilities:
         normal:
           speed: 1
           quality: 1
+  odt:
+    md:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    html:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    pdf:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+  rtf:
+    md:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    html:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    pdf:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+  fb2:
+    md:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    html:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    epub:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+  mobi:
+    md:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    html:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
+    epub:
+      modes:
+        normal:
+          speed: 1
+          quality: 1
 EOF
         exit 0
         ;;
