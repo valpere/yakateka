@@ -183,11 +183,11 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		}
 	}
 
-	// Keep formats that appear as BOTH source AND target
-	// This removes columns with no incoming conversions and rows with no outgoing conversions
+	// Keep formats that participate in at least one conversion (source OR target)
+	// This includes one-way conversions (source-only or target-only formats)
 	formats := make([]string, 0, len(allFormats))
 	for _, format := range allFormats {
-		if sourceFormats[format] && targetFormats[format] {
+		if sourceFormats[format] || targetFormats[format] {
 			formats = append(formats, format)
 		}
 	}
@@ -211,7 +211,7 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 
 	// Print title
 	fmt.Println("Format Conversion Matrix:")
-	fmt.Println("(✓ = conversion supported)")
+	fmt.Println("(✓ = conversion supported, - = same format)")
 	fmt.Println()
 
 	// Helper function to print separator row
@@ -250,8 +250,8 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		for colIdx, toFormat := range formats {
 			symbol := " "
 			if fromFormat == toFormat {
-				// Same format - show empty set symbol
-				symbol = "∅"
+				// Same format - show dash to indicate not applicable
+				symbol = "-"
 			} else {
 				// Check if conversion exists (any mode)
 				if toFormats, ok := cache.Conversions[fromFormat]; ok {
