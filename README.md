@@ -65,7 +65,32 @@ make install
 
 ### Format Support Matrix
 
-**Pandoc Converter** (implemented):
+**Current Support** (via Helper System):
+
+Use `yakateka helpers --formats` to view the **complete, up-to-date conversion matrix** showing all supported format conversions across all helpers.
+
+**Key capabilities include**:
+- **Office documents**: DOC, DOCX, ODT, RTF ↔ PDF, HTML, TXT, MD
+- **E-books**: EPUB, MOBI, FB2, AZW, AZW3, LIT, PDB (via Calibre)
+- **Markup formats**: MD, HTML, DOCX, EPUB, FB2 (via Pandoc)
+- **Legacy formats**: DJVU → PDF/TXT/PS, PDF → DJVU
+- **PostScript**: PS ↔ PDF, EPS → PDF/PS
+
+**Example conversions**:
+- DOC → MD (via LibreOffice + Pandoc pipeline)
+- MOBI → MD (via Calibre or Pandoc)
+- DJVU → PDF (via djvups + Ghostscript)
+- PDF → HTML (via LibreOffice)
+- FB2 ↔ EPUB ↔ MOBI (via Calibre)
+
+**Legend**:
+- ✓ = conversion supported
+- `-` = same format (no conversion needed)
+
+**Historical Note**: The table below shows **Pandoc-only** capabilities (partial view):
+
+<details>
+<summary>Pandoc Converter capabilities (click to expand)</summary>
 
 | From ⬇️ / To ➡️ | TXT | MD | HTML | DOCX | ODT | RTF | PDF | EPUB | FB2 | JSON | CSV | LaTeX | RST |
 |----------------|-----|-------|------|------|-----|-----|-----|------|-----|------|-----|-------|-----|
@@ -76,16 +101,10 @@ make install
 | **DOCX**       | ✅  | ✅    | ✅   | -    | ✅  | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
 | **ODT**        | ✅  | ✅    | ✅   | ✅   | -   | ✅  | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
 | **RTF**        | ✅  | ✅    | ✅   | ✅   | ✅  | -   | ✅  | ✅   | ✅  | ✅   | ✅  | ✅    | ✅  |
-| **PDF**        | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | -   | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
-| **DOC**        | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | ❌  | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
-| **DJVU**       | ✅  | ⚠️    | ⚠️   | ⚠️   | ⚠️  | ⚠️  | ⚠️  | ⚠️   | ⚠️  | ⚠️   | ⚠️  | ⚠️    | ⚠️  |
-| **MOBI**       | ❌  | ❌    | ❌   | ❌   | ❌  | ❌  | ❌  | ❌   | ❌  | ❌   | ❌  | ❌    | ❌  |
 
-**Legend**:
-- ✅ Supported and tested
-- ⚠️  Supported for DJVU with text layer (scanned PDFs without OCR will be empty)
-- ❌ Not supported (requires LibreOffice or other converter)
-- `-` Same format (no conversion needed)
+*Note*: This shows only Pandoc converter capabilities. The helper system provides many more conversions (DOC, MOBI, DJVU, PS, etc.) via LibreOffice, Calibre, DjVuLibre, Ghostscript, and other tools.
+
+</details>
 
 **DjVu Converter** (DjVuLibre):
 - ✅ **DJVU → TXT** (tested with 3.7MB extraction in 487ms)

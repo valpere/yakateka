@@ -85,7 +85,7 @@ capabilities:
           quality: 1
 EOF
 
-        # Conditionally add DOC→MD if Pandoc is available
+        # Conditionally add DOC→MD if Pandoc is available (must be part of doc: section)
         if [ "$HAS_PANDOC" = true ]; then
             cat <<'EOF'
     md:
@@ -96,6 +96,7 @@ EOF
 EOF
         fi
 
+        # Continue with rest of capabilities
         cat <<'EOF'
   docx:
     pdf:

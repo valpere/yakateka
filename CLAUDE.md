@@ -324,25 +324,37 @@ yakateka preprocess <image> <output> [--denoise] [--deskew] [--threshold]
 - [x] Basic tests and CI setup
 - [x] Version flag support
 
-### Phase 2: Core Conversion ← **CURRENT PRIORITY**
+### Phase 2: Core Conversion ✅ **COMPLETED**
 - [x] Converter factory pattern
 - [x] Convert command with auto-format detection
 - [x] Configurable timeout for conversions
+- [x] **Helper system** (external scripts as converters)
+  - ✅ Plugin interface (ping, info, convert commands)
+  - ✅ Weight-based prioritization and automatic fallback
+  - ✅ Format matrix visualization (`yakateka helpers --formats`)
+  - ✅ Relative path support with runtime resolution
+  - ✅ 8 helpers implemented (Pandoc, LibreOffice, Calibre, DjVuLibre, Ghostscript, Poppler, AbiWord, pdf2djvu)
 - [x] **Pandoc wrapper** (universal converter via os/exec)
   - ✅ EPUB → TXT/MD/HTML (tested with real files)
   - ✅ MD → PDF/HTML/DOCX/EPUB (tested)
   - ✅ DOCX → TXT/MD/HTML (tested)
   - ✅ HTML → MD/TXT/DOCX (tested)
+  - ✅ ODT, RTF, FB2, MOBI → MD (added)
   - ⚠️ **Cannot read PDF** (Pandoc limitation - can only write PDF)
   - ✅ Format mapping (internal formats → Pandoc formats)
   - ✅ Unit tests (85.2% coverage)
   - ✅ Integration tests with real documents
   - ✅ Example scripts
-- [ ] **PDF → Text** (Requires alternative to Pandoc):
-  - [ ] LibreOffice wrapper (CLI via os/exec)
-  - [ ] OCR + Ollama (AI-powered, for scanned/complex documents)
-- [ ] DOCX → Text (gooxml - native Go alternative to Pandoc)
-- [ ] Image format conversion (bimg)
+- [x] **LibreOffice wrapper** (CLI via os/exec)
+  - ✅ PDF/PS/DOC/DOCX/ODT/RTF → HTML/PDF/TXT
+  - ✅ DOC → MD via pipeline (DOC → DOCX → MD using Pandoc)
+  - ✅ Bidirectional office format conversions
+- [x] **Calibre wrapper** (ebook conversions)
+  - ✅ MOBI/EPUB/FB2/AZW/AZW3/LIT/PDB conversions
+- [x] **DjVuLibre, Ghostscript, Poppler helpers** (PDF/DJVU/PS conversions)
+- [ ] DOCX → Text (gooxml - native Go alternative to Pandoc) - **Deferred** (helper system sufficient)
+- [ ] Image format conversion (bimg) - **Deferred** (not immediate priority)
+- [ ] OCR + Ollama (AI-powered, for scanned/complex documents) - **Moved to Phase 3**
 
 ### Phase 3: OCR Integration ← **NEXT PRIORITY**
 **Goal**: Handle scanned documents (PDFs, DJVUs without text layer)

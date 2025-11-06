@@ -157,7 +157,7 @@ func displayFormatMatrix(cache *helper.HelperCache) {
 		}
 	}
 
-	// Convert to sorted slice and filter out formats with no conversions
+	// Convert format set to sorted slice
 	allFormats := make([]string, 0, len(formatSet))
 	for format := range formatSet {
 		allFormats = append(allFormats, format)
